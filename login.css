@@ -1,0 +1,132 @@
+* {
+    box-sizing: border-box; /* Ensure padding and border are included in width/height */
+}
+
+body {
+    margin: 0; /* Remove default body margin */
+    font-family: Arial, Helvetica; /* Set a default font */
+    background-color: #f9f9f9; /* Light background color for better visibility */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    min-height: 100vh; /* Ensure the body takes up at least full viewport height */
+}
+
+.container {
+    width: 100%; /* Full width on small screens */
+    max-width: 400px; /* Maximum width for larger screens */
+    margin: 0 auto; /* Center the container */
+    padding: 10px; /* Reduced padding around the container for more space */
+    flex-grow: 1; /* Allow the container to grow and take available space */
+}
+
+h1 {
+    text-align: center; /* Center the title */
+    margin-top: 10px; /* Reduced margin-top to bring the title up */
+    margin-bottom: 10px; /* Reduced margin-bottom to bring the content closer */
+    font-size: 2em; /* You can adjust the size as needed */
+}
+
+.box {
+    width: 100%; /* Reduced width of the box */
+    max-width: 400px; /* Set a max width */
+    padding: 20px; /* Reduced padding inside the box for a smaller height */
+    box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.2); /* Slightly softer shadow */
+    background: white; /* White background for the box */
+    border-radius: 5px; /* Rounded corners */
+    margin-bottom: 20px; /* Added space between box and footer */
+}
+
+.list a {
+    display: none; /* Initially hide links */
+    margin: 10px 0; /* Add margin between links */
+    color: rgb(40, 74, 224); /* Link color */
+    text-decoration: none;
+    font-size: 15px;
+}
+a{
+    color: rgb(40, 74, 224); 
+}
+
+.btn{
+    background-color: gold; /* Button color */
+    width: 100%; /* Full width for buttons */
+    border: none;
+    padding: 8px ; /* Reduced padding for smaller buttons */
+    border-radius: 5px; /* Rounded button */
+    cursor: pointer; /* Change cursor on hover */
+}
+
+.total{
+    box-shadow: -6px 0px 12px rgba(0, 0, 0, 0.2); /* Slightly softer shadow */
+    background-color: white;
+}
+.btn1{
+    background-color: white;
+    border-color:#a4a1a1 ;
+    border-width: 0.1em;
+    padding: 8px ; /* Reduced padding for smaller buttons */
+    border-radius: 5px; 
+    cursor: pointer;
+    width: 100%;
+}
+
+input {
+    width: 100%; /* Full width for input */
+    padding: 8px; /* Reduced padding for smaller input field */
+    margin:0; /* Vertical spacing */
+    border: 1px solid #ccc; /* Border around input */
+    border-radius: 5px; /* Rounded input */
+}
+
+@media (max-width: 600px) {
+    h1 {
+        font-size: 1.5em; /* Smaller heading on small screens */
+    }
+}
+
+.line-container {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center the line and text */
+    margin: 10px 0; /* Reduced margin for the lines */
+    width: 100%; /* Make line container full width */
+}
+
+.line {
+    flex: 1; /* Allow the lines to grow */
+    height: 1px;
+    background-color: #a4a1a1; /* Line color */
+}
+
+.line-text {
+    margin: 0 10px; /* Space between text and lines */
+    color: #a4a1a1;
+    font-size: 14px; /* Slightly smaller font size for the text */
+}
+
+.dropdown {
+    text-decoration: none;
+}
+
+.f1 {
+    display: flex;
+    justify-content: center;
+}
+
+.f1 a {
+    text-decoration: none;
+    padding: 10px 15px; /* Reduced padding for footer links */
+    font-size: 12px;
+}
+
+footer p {
+    text-align: center;
+    font-size: 12px;
+}
+
+footer {
+    padding: 40px 0; /* Increased padding for a taller footer */
+    margin-top: auto; /* Push footer to the bottom of the screen */
+    height: 250px;
+}

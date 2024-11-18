@@ -10,7 +10,7 @@ using namespace sql;
 using namespace mysql;
 
 class login {
-    string username, emailid, password;
+    string username, emailid,mobile_no, password;
 public:
     void already_customer(Connection*);
     void new_customer(Connection*);
@@ -18,7 +18,7 @@ public:
 };
 
 void login::already_customer(Connection *con1) {
-    string username, password, mobile_no;
+    string username, password;
     cout << "Sign in using " << endl;
     cout << "1. Mobile number" << endl;
     cout << "2. Email" << endl;
@@ -32,12 +32,12 @@ void login::already_customer(Connection *con1) {
 
     try {
         if (choice == 1) {
-            cout << "Mobile No: ";
+            cout << "mobile_no: ";
             getline(cin, mobile_no);
             cout << "Password: ";
             getline(cin, password);
 
-            pstmt = con1->prepareStatement("SELECT * FROM users WHERE mobile_number = ? AND password = ?");
+            pstmt = con1->prepareStatement("SELECT * FROM users WHERE mobile_no = ? AND password = ?");
             pstmt->setString(1, mobile_no);
             pstmt->setString(2, password);
             res = pstmt->executeQuery();
@@ -75,23 +75,26 @@ void login::already_customer(Connection *con1) {
 }
 
 void login::new_customer(Connection *con1) {
-    string username, emailid, password;
+    string username, emailid, password,mobile_no;
 
     cout << "Create a new account" << endl;
     cout << "Username: ";
     getline(cin, username);
     cout << "Email ID: ";
     getline(cin, emailid);
+    cout << "Mobile No: ";
+    getline(cin, mobile_no);
     cout << "Password: ";
     getline(cin, password);
 
     PreparedStatement *pstmt = nullptr;
 
     try {
-        pstmt = con1->prepareStatement("INSERT INTO users (username, emailid, password) VALUES (?, ?, ?)");
+        pstmt = con1->prepareStatement("INSERT INTO users (username, emailid,mobile_no,password) VALUES (?, ?,?, ?)");
         pstmt->setString(1, username);
         pstmt->setString(2, emailid);
-        pstmt->setString(3, password);
+        pstmt->setString(3, mobile_no);
+        pstmt->setString(4, password);
         pstmt->executeUpdate();
 
         cout << "Account created successfully!" << endl;
