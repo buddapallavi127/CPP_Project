@@ -37,13 +37,14 @@ void login::already_customer(Connection *con1) {
             cout << "Password: ";
             getline(cin, password);
 
-            pstmt = con1->prepareStatement("SELECT * FROM users WHERE mobile_no = ? AND password = ?");
+            pstmt = con1->prepareStatement("SELECT username FROM users WHERE mobile_no = ? AND password = ?");
             pstmt->setString(1, mobile_no);
             pstmt->setString(2, password);
             res = pstmt->executeQuery();
 
             if (res->next()) {
-                cout << "Sign in successful!" << endl;
+                string logged_in_username = res->getString("username");
+                cout << "Sign in successful! Welcome, " << logged_in_username << "!" << endl;
             } else {
                 cout << "Invalid credentials!" << endl;
             }
@@ -53,13 +54,14 @@ void login::already_customer(Connection *con1) {
             cout << "Password: ";
             getline(cin, password);
 
-            pstmt = con1->prepareStatement("SELECT * FROM users WHERE emailid = ? AND password = ?");
+            pstmt = con1->prepareStatement("SELECT username FROM users WHERE emailid = ? AND password = ?");
             pstmt->setString(1, username);
             pstmt->setString(2, password);
             res = pstmt->executeQuery();
 
             if (res->next()) {
-                cout << "Sign in successful!" << endl;
+                string logged_in_username = res->getString("username");
+                cout << "Sign in successful! Welcome, " << logged_in_username << "!" << endl;
             } else {
                 cout << "Invalid credentials!" << endl;
             }
@@ -73,7 +75,6 @@ void login::already_customer(Connection *con1) {
     delete res; // Clean up
     delete pstmt; // Clean up
 }
-
 void login::new_customer(Connection *con1) {
     string username, emailid, password,mobile_no;
 
@@ -145,5 +146,6 @@ int main() {
         cerr << "SQLException: " << e.what() << endl;
         return 1;
     }
+  
     return 0;
 }
