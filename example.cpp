@@ -55,6 +55,7 @@ void login::already_customer(Connection *con1) {
 
                 if (res->next()) {
                     cout << "Sign in successful!" << endl;
+            cout<<"Boom! You’re all set "<<username<<"Let’s make something incredible happen today with your shopping";
                 } else {
                     cout << "Invalid credentials!" << endl;
                 }
@@ -81,6 +82,8 @@ void login::already_customer(Connection *con1) {
 
                 if (res->next()) {
                     cout << "Sign in successful!" << endl;
+                                cout<<"Boom! You’re all set "<<username<<"Let’s make something incredible happen today with your shopping";
+
                 } else {
                     cout << "Invalid credentials!" << endl;
                 }
@@ -130,6 +133,7 @@ void login::new_customer(Connection *con1) {
             pstmt->executeUpdate();
 
             cout << "Account created successfully!" << endl;
+            cout<<"Boom! You’re all set "<<username<<"Let’s make something incredible happen today with your shopping";
         }
     } catch (SQLException &e) {
         cerr << "SQLException: " << e.what() << endl;
