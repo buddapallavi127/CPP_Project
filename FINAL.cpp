@@ -12,7 +12,7 @@
 using namespace std;
 using namespace sql;
 using namespace mysql;
-
+ string needed;
 class login {
     string username, emailid,mobile_no, password;
 public:
@@ -56,6 +56,9 @@ void login::already_customer(Connection *con1) {
                 if (res->next()) {
                     cout << "Sign in successful!" << endl;
             cout<<"Boom! You’re all set "<<username<<"Let’s make something incredible happen today with your shopping";
+            needed=username;
+                              pstmt = con1->prepareStatement("INSERT INTO user_details (username) VALUES (?)");
+                              pstmt->setString(1,username);
                 } else {
                     cout << "Invalid credentials!" << endl;
                 }
@@ -73,7 +76,8 @@ void login::already_customer(Connection *con1) {
 
             if (res->next()) {
                 string logged_in_username = res->getString("username");
-                cout << "Sign in successful! Welcome, " << logged_in_username << "!" << endl;
+                needed=username;
+                cout << " Boom! You’re all set" << logged_in_username << "!" << endl;
             } else {
                 cout << "Invalid credentials!" << endl;
             }
@@ -123,6 +127,7 @@ void login::new_customer(Connection *con1) {
 
             cout << "Account created successfully!" << endl;
             cout<<"Boom! You’re all set "<<username<<"Let’s make something incredible happen today with your shopping";
+            needed=username;
         }
     } catch (SQLException &e) {
         cerr << "SQLException: " << e.what() << endl;
@@ -493,7 +498,7 @@ void checkout(Cart& cart, const string& address) {
     cout << "Thank you for your order!\n";
 
     cout<<"FEEDBACK : Spare a few seconds to make your next orders more effective";
-    cout<<"Rate between 0-5";
+    cout<<"Rate between 0-5"<<endl;
     cout<<"Product Quality : ";
     cin>>c;
     cout<<"USING THE APP : ";
@@ -501,7 +506,6 @@ void checkout(Cart& cart, const string& address) {
     cout<<"DELIVERY SERVICE : ";
     cin>>b;
     cart.getItems().clear();  // Empty the cart after checkout
-    cout<<"!!!THANKYOU FOR CHOOSING ON WHIMSY";
 }
 
 int main() {
@@ -520,7 +524,7 @@ int main() {
         cout << "Track your purchases" << endl << endl;
 
         cout << "1. Already a customer? Sign in" << endl;
-        cout << "2. New to WHIMSY? Create an account" << endl;
+        cout << "2. New to Amazon.in? Create an account" << endl;
         cout << "3. Skip sign in" << endl;
 
         int choice;
@@ -561,8 +565,7 @@ int main() {
             cout << "2. Clothes\n";
             cout << "3. Electronics\n";
             cout << "4. View Cart\n";
-            cout<<"5.Remove item from cart";
-            cout << "6. Checkout\n";
+            cout << "5. Checkout\n";
             cout << "0. Exit\n";
             cout << "Enter your choice: ";
             cin >> choice;
@@ -574,14 +577,8 @@ int main() {
                 case 3: category = "electronics"; break;
                 case 4:
                     cart.displayCart();
-                    break;  // Stay in the loop
-                case 5:
-                    int a;
-                    cout<<"enter the pid value";
-                    cin>>a;
-                    cart.removeItem(a);
-                    break;
-                case 6: {
+                    continue;  // Stay in the loop
+                case 5: {
                     cout << "Enter your delivery address: ";
                     string address;
                     cin.ignore(); // To clear the input buffer
@@ -601,8 +598,20 @@ int main() {
             if (continueShopping && choice >= 1 && choice <= 3) {
                 // Fetch and display products for the selected category
                 db.fetchAndDisplayProducts(category);
+                int pid, quantity;
+        
+        cout << "Enter Product ID (pid): ";
+        cin >> pid;
+        cout << "Enter Quantity: ";
+        cin >> quantity;
+        
+        // Insert data into user_details table
+        string query = "INSERT INTO user_details (pid, stock,username) VALUES (?, ?,?)";
+        //session.sql(query).bind(pid, quantity,needed).execute();
+       
+        cout << "Data inserted successfully!" << endl;
 
-                // Ask user to select a product by ID
+                /*// Ask user to select a product by ID
                 cout << "Enter the Product ID to add to cart: ";
                 int pid;
                 cin >> pid;
@@ -612,9 +621,12 @@ int main() {
                 if (selectedProduct != nullptr) {
                     int quantity;
                     cout << "Enter the quantity to add to cart: ";
-                    cin >> quantity;
+                    cin >> quantity;*/
 
                     // Check if the requested quantity is available
+                    Product* selectedProduct = db.getProductById(pid, category);
+                    
+
                     if (quantity <= selectedProduct->getStock() && quantity > 0) {
                         cart.addItem(selectedProduct, quantity);
 
@@ -628,8 +640,7 @@ int main() {
                     cout << "Product not found.\n";
                 }
             }
-        }
-    } catch (sql::SQLException &e) {
+        } catch (sql::SQLException &e) {
         cerr << "Error: " << e.what() << endl;
     }
 
