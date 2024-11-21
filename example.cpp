@@ -510,8 +510,8 @@ int main() {
 
     try {
         driver = get_mysql_driver_instance();
-        con = driver->connect("tcp://127.0.0.1:3306", "root", "Cutiepie@152005"); // Change to your credentials
-        con->setSchema("cpp_project");
+        con = driver->connect("tcp://127.0.0.1:3306", "root", "buddapallavi127"); // Change to your credentials
+        con->setSchema("Project");
 
         cout << "Connected to the database successfully!" << endl << endl;
 
@@ -544,8 +544,8 @@ int main() {
         // Database connection details
         string host = "localhost";
         string user = "root"; // Your MySQL username
-        string password = "Cutiepie@152005"; // Your MySQL password
-        string dbname = "cpp_project"; // Database name
+        string password = "buddapallavi127"; // Your MySQL password
+        string dbname = "Project"; // Database name
 
         // Create a Cart object to store items
         Cart cart;
@@ -561,7 +561,7 @@ int main() {
             cout << "2. Clothes\n";
             cout << "3. Electronics\n";
             cout << "4. View Cart\n";
-            cout<<"5.Remove item from cart";
+            cout<<"5.Remove item from cart\n";
             cout << "6. Checkout\n";
             cout << "0. Exit\n";
             cout << "Enter your choice: ";
