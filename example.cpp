@@ -63,33 +63,23 @@ void login::already_customer(Connection *con1) {
         } else if (choice == 2) {
             cout << "Email: ";
             getline(cin, username);
-            
-            pstmt = con1->prepareStatement("SELECT * FROM users WHERE emailid = ?");
+            cout << "Password: ";
+            getline(cin, password);
+
+            pstmt = con1->prepareStatement("SELECT username FROM users WHERE emailid = ? AND password = ?");
             pstmt->setString(1, username);
+            pstmt->setString(2, password);
             res = pstmt->executeQuery();
 
-            if (!res->next()) {
-                cout << "Email not registered. Please create an account first.\n";
+            if (res->next()) {
+                string logged_in_username = res->getString("username");
+                
+                cout << " Boom! You’re all set" << logged_in_username << "!" << endl;
             } else {
-                delete pstmt; // Cleanup
-                pstmt = con1->prepareStatement("SELECT * FROM users WHERE emailid = ? AND password = ?");
-                pstmt->setString(1, username);
-
-                cout << "Password: ";
-                getline(cin, password);
-                pstmt->setString(2, password);
-                res = pstmt->executeQuery();
-
-                if (res->next()) {
-                    cout << "Sign in successful!" << endl;
-                                cout<<"Boom! You’re all set "<<username<<"Let’s make something incredible happen today with your shopping";
-
-                } else {
-                    cout << "Invalid credentials!" << endl;
-                }
+                cout << "Invalid credentials!" << endl;
             }
         } else {
-            cout << "Invalid choice. Please try again." << endl;
+            cout << "Check the options correctly" << endl;
         }
     } catch (SQLException &e) {
         cerr << "SQLException: " << e.what() << endl;
@@ -500,7 +490,17 @@ void checkout(Cart& cart, const string& address) {
     cout << "\nTotal Order Value: " << total << " INR\n";
 
     // Finalize checkout
+    int a,b,c;
     cout << "Thank you for your order!\n";
+
+    cout<<"FEEDBACK : Spare a few seconds to make your next orders more effective";
+    cout<<"Rate between 0-5"<<endl;
+    cout<<"Product Quality : ";
+    cin>>c;
+    cout<<"USING THE APP : ";
+    cin>>a;
+    cout<<"DELIVERY SERVICE : ";
+    cin>>b;
     cart.getItems().clear();  // Empty the cart after checkout
 }
 
