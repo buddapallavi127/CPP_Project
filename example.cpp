@@ -27,7 +27,7 @@ void login::already_customer(Connection *con1) {
 
     int choice;
     cin >> choice;
-    cin.ignore(); // Clear newline from the input buffer
+    cin.ignore(); 
 
     PreparedStatement *pstmt = nullptr;
     ResultSet *res = nullptr;
@@ -101,8 +101,8 @@ void login::already_customer(Connection *con1) {
         cerr << "SQLException: " << e.what() << endl;
     }
 
-    delete res; // Clean up
-    delete pstmt; // Clean up
+    delete res; 
+    delete pstmt; 
 }
 void login::new_customer(Connection *con1) {
     cout << "Create a new account" << endl;
@@ -145,17 +145,15 @@ void login::new_customer(Connection *con1) {
         cerr << "SQLException: " << e.what() << endl;
     }
 
-    delete res; // Clean up
-    delete pstmt; // Clean up
+    delete res; 
+    delete pstmt; 
 }
 
 
 void login::skip_signin(Connection *con1) {
     cout << "You have chosen to skip signing in." << endl;
-    // Additional functionality can be added here if needed.
 }
 
-// Base class for product
 class Product {
 protected:
     int pid;
@@ -179,7 +177,6 @@ public:
     }
 };
 
-// Groceries class derived from Product
 class Groceries : public Product {
 private:
     string brand;
@@ -208,7 +205,6 @@ public:
     }
 };
 
-// Clothes class derived from Product
 class Clothes : public Product {
 private:
     string size;
@@ -228,7 +224,6 @@ public:
     }
 };
 
-// Electronics class derived from Product
 class Electronics : public Product {
 public:
     Electronics(int pid, const string& name, double price, int stock)
@@ -323,23 +318,11 @@ public:
 
 // Database class for actual DB interaction
 class Database {
-private:
-    sql::Connection *conn;
 
 public:
-    Database(const string& host, const string& user, const string& password, const string& dbname) {
-        sql::mysql::MySQL_Driver *driver;
-        driver = sql::mysql::get_mysql_driver_instance();
-        conn = driver->connect("tcp://" + host + ":3306", user, password);
-        conn->setSchema(dbname);
-    }
-
-    ~Database() {
-        delete conn;
-    }
 
     // Fetch products by category and display them
-    void fetchAndDisplayProducts(const string& category) {
+    void fetchAndDisplayProducts(Connection *conn,const string& category) {
         sql::Statement *stmt = conn->createStatement();
         sql::ResultSet *res;
 
@@ -413,7 +396,7 @@ public:
     }
 
     // Get product by ID from the database
-    Product* getProductById(int pid, const string& category) {
+    Product* getProductById(Connection *conn,int pid, const string& category) {
         sql::Statement *stmt = conn->createStatement();
         sql::ResultSet *res;
         Product* product = nullptr;
@@ -457,7 +440,7 @@ public:
     }
 
     // Update stock in the database
-    void updateStockInDatabase(int pid, int newStock, const string& category) {
+    void updateStockInDatabase(Connection *conn,int pid, int newStock, const string& category) {
         sql::Statement *stmt = conn->createStatement();
         if (category == "groceries") {
             stmt->executeUpdate("UPDATE groceries SET stock=" + to_string(newStock) + " WHERE pid=" + to_string(pid));
@@ -559,16 +542,13 @@ int main() {
    
     try {
         // Database connection details
-        string host = "localhost";
-        string user = "root"; // Your MySQL username
-        string password = "buddapallavi127"; // Your MySQL password
-        string dbname = "Project"; // Database name
+        driver = get_mysql_driver_instance();
+        con = driver->connect("tcp://127.0.0.1:3306", "root", "buddapallavi127"); // Change to your credentials
+        con->setSchema("Project");
 
+         Database db;
         // Create a Cart object to store items
         Cart cart;
-
-        // Create a Database object
-        Database db(host, user, password, dbname);
 
         bool continueShopping = true;
         while (continueShopping) {
@@ -617,7 +597,7 @@ int main() {
 
             if (continueShopping && choice >= 1 && choice <= 3) {
                 // Fetch and display products for the selected category
-                db.fetchAndDisplayProducts(category);
+                db.fetchAndDisplayProducts(con,category);
 
                 // Ask user to select a product by ID
                 cout << "Enter the Product ID to add to cart: ";
@@ -625,7 +605,7 @@ int main() {
                 cin >> pid;
 
                 // Fetch product details from the database
-                Product* selectedProduct = db.getProductById(pid, category);
+                Product* selectedProduct = db.getProductById(con,pid, category);
                 if (selectedProduct != nullptr) {
                     int quantity;
                     cout << "Enter the quantity to add to cart: ";
@@ -637,7 +617,7 @@ int main() {
 
                         // Update stock in the database
                         int newStock = selectedProduct->getStock() - quantity;
-                        db.updateStockInDatabase(pid, newStock, category);
+                        db.updateStockInDatabase(con,pid, newStock, category);
                     } else {
                         cout << "Not enough stock available.\n";
                     }
