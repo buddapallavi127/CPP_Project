@@ -546,8 +546,7 @@ int main() {
         con = driver->connect("tcp://127.0.0.1:3306", "root", "buddapallavi127"); // Change to your credentials
         con->setSchema("Project");
 
-         Database db;
-        // Create a Cart object to store items
+        Database db;
         Cart cart;
 
         bool continueShopping = true;
@@ -571,7 +570,7 @@ int main() {
                 case 3: category = "electronics"; break;
                 case 4:
                     cart.displayCart();
-                    break;  // Stay in the loop
+                    break; 
                 case 5:
                     int a;
                     cout<<"enter the pid value";
@@ -581,41 +580,37 @@ int main() {
                 case 6: {
                     cout << "Enter your delivery address: ";
                     string address;
-                    cin.ignore(); // To clear the input buffer
+                    cin.ignore(); 
                     getline(cin, address);
                     checkout(cart, address);
-                    continueShopping = false;  // Exit the loop after checkout
+                    continueShopping = false;
                     break;
                 }
                 case 0:
-                    continueShopping = false;  // Exit the loop
+                    continueShopping = false;
                     break;
                 default:
                     cout << "Invalid choice. Please try again.\n";
-                    continue;  // Stay in the loop
+                    continue; 
             }
 
             if (continueShopping && choice >= 1 && choice <= 3) {
-                // Fetch and display products for the selected category
+                
                 db.fetchAndDisplayProducts(con,category);
 
-                // Ask user to select a product by ID
                 cout << "Enter the Product ID to add to cart: ";
                 int pid;
                 cin >> pid;
 
-                // Fetch product details from the database
                 Product* selectedProduct = db.getProductById(con,pid, category);
                 if (selectedProduct != nullptr) {
                     int quantity;
                     cout << "Enter the quantity to add to cart: ";
                     cin >> quantity;
 
-                    // Check if the requested quantity is available
                     if (quantity <= selectedProduct->getStock() && quantity > 0) {
                         cart.addItem(selectedProduct, quantity);
 
-                        // Update stock in the database
                         int newStock = selectedProduct->getStock() - quantity;
                         db.updateStockInDatabase(con,pid, newStock, category);
                     } else {
