@@ -57,17 +57,17 @@ void login::already_customer(Connection *con1) {
                 res = pstmt->executeQuery();
 
                 if (res->next()) {
-                    cout << "Sign in successful!" << endl;
-            cout<<"Boom! You're all set "<<username<<"Let's make something incredible happen today with your shopping";
-            i--;
-                } else {
-                    cout << "Invalid credentials! " << endl;
-                    i++;
-                    if(i==3){
+                string logged_in_username = res->getString("username");
+                cout << "Sign in successful! Welcome, " << logged_in_username << "!" << endl;
+                i--;
+            } else {
+                cout << "Invalid credentials!" << endl;
+                i++;
+                if(i==3){
                         exit(0);
                     }
                     cout<<"enter again * *\n";
-                }
+            }
             }
         }} else if (choice == 2) {
             int i=1;
