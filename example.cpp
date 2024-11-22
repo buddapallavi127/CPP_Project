@@ -34,8 +34,12 @@ void login::already_customer(Connection *con1) {
 
     try {
         if (choice == 1) {
+            int i=1;
+            while(i>0 && i<4){
             cout << "Mobile No: ";
             getline(cin, mobile_no);
+            cout << "Password: ";
+            getline(cin, password);
             
             pstmt = con1->prepareStatement("SELECT * FROM users WHERE mobile_no = ?");
             pstmt->setString(1, mobile_no);
@@ -43,24 +47,31 @@ void login::already_customer(Connection *con1) {
 
             if (!res->next()) {
                 cout << "Mobile number not registered. Please create an account first.\n";
+                exit(0);
             } else {
                 delete pstmt; // Cleanup
                 pstmt = con1->prepareStatement("SELECT * FROM users WHERE mobile_no = ? AND password = ?");
                 pstmt->setString(1, mobile_no);
 
-                cout << "Password: ";
-                getline(cin, password);
                 pstmt->setString(2, password);
                 res = pstmt->executeQuery();
 
                 if (res->next()) {
                     cout << "Sign in successful!" << endl;
-            cout<<"Boom! You’re all set "<<username<<"Let’s make something incredible happen today with your shopping";
+            cout<<"Boom! You're all set "<<username<<"Let's make something incredible happen today with your shopping";
+            i--;
                 } else {
-                    cout << "Invalid credentials!" << endl;
+                    cout << "Invalid credentials! " << endl;
+                    i++;
+                    if(i==3){
+                        exit(0);
+                    }
+                    cout<<"enter again * *\n";
                 }
             }
-        } else if (choice == 2) {
+        }} else if (choice == 2) {
+            int i=1;
+            while(i>0 && i<4){
             cout << "Email: ";
             getline(cin, username);
             cout << "Password: ";
@@ -74,10 +85,16 @@ void login::already_customer(Connection *con1) {
             if (res->next()) {
                 string logged_in_username = res->getString("username");
                 cout << "Sign in successful! Welcome, " << logged_in_username << "!" << endl;
+                i--;
             } else {
                 cout << "Invalid credentials!" << endl;
+                i++;
+                if(i==3){
+                        exit(0);
+                    }
+                    cout<<"enter again * *\n";
             }
-        } else {
+        } }else {
             cout << "Check the options correctly" << endl;
         }
     } catch (SQLException &e) {
@@ -150,7 +167,7 @@ public:
     Product(int pid, const string& name, double price, int stock)
         : pid(pid), name(name), price(price), stock(stock) {}
 
-    virtual void display() = 0; // Pure virtual function to display product details
+    virtual void display() = 0;
     int getPid() const { return pid; }
     string getName() const { return name; }
     double getPrice() const { return price; }
